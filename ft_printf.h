@@ -51,5 +51,6 @@ void			reset_box(t_box *info);
 void			put_flag(t_box *info, char c);
 int				sizeof_sym(int c);
 int				print(va_list arg, t_box *info);
+int				output_str(t_box *info, char *string);
 
 #endif

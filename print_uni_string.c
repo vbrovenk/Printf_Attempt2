@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h>
 
 static int		uni_putstr(int *string, t_box *info)
 {
@@ -41,22 +42,23 @@ static int		uni_putstr(int *string, t_box *info)
 
 static int		null_str(t_box *info)
 {
-	int ret;
+	int		ret;
+	char	*string;
+	char	*temp;
 
-	ret = 0;
-	info->start = info->width - 6;
-	if (info->minus == 1)
+	string = ft_strdup("(null)");
+	if (info->precision == -1)
 	{
-		ret += write(1, "(null)", 6);
-		while (info->start-- > 0)
-			ret += write(1, " ", 1);
+		free(string);
+		string = ft_strdup("");
 	}
-	else
+	if (info->precision > 0)
 	{
-		while (info->start-- > 0)
-			info->zero ? ret += write(1, "0", 1) : (ret += write(1, " ", 1));
-		ret += write(1, "(null)", 6);
+		temp = ft_strsub(string, 0, info->precision);
+		free(string);
+		string = temp;
 	}
+	ret = output_str(info, string);
 	return (ret);
 }
 
@@ -132,7 +134,7 @@ int				print_uni_string(va_list arg, t_box *info)
 			length += sizeof_sym(string[i]);
 			i++;
 		}
+		ret = out_uni_str(info, string, length);
 	}
-	ret = out_uni_str(info, string, length);
 	return (ret);
 }
